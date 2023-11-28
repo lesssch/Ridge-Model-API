@@ -7,6 +7,7 @@ from typing import List, Tuple
 import io
 import joblib
 from model import lr_r
+import numpy as np
 
 
 app = FastAPI()
@@ -80,13 +81,10 @@ def predict_item(item: Item) -> dict:
     df = df.drop(["selling_price", "name"], axis=1)
     df = pd.get_dummies(data=df, columns=["fuel", "seller_type", "transmission", "owner", "seats"], prefix_sep="_", dtype=int)
 
-    data = df.to_dict()
+    sc = StandardScaler()
+    df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.fit_transform(np.array(df[["year", "km_driven", "mileage", "engine", "max_power"]]).reshape(-1, 1))
 
-    # sc = StandardScaler()
-    # df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.fit_transform(
-    #     df[["year", "km_driven", "mileage", "engine", "max_power"]])
-    #
-    # data = df.to_dict()
+    data = df.to_dict()
     # car = Schema(**df)
     # data = car.model_dump()
     # df = pd.DataFrame([data])
