@@ -114,7 +114,8 @@ def predict_items(file: UploadFile = File(...)) -> FileResponse:
     df.replace("&_", "", regex=True, inplace=True)
 
     df = df.drop(["selling_price", "name"], axis=1)
-    df = pd.get_dummies(data=df, columns=["fuel", "seller_type", "transmission", "owner", "seats"], prefix_sep="_",
+    df = pd.get_dummies(data=df, columns=["fuel", "seller_type", "transmission", "owner", "seats"], drop_first=True,
+                        prefix_sep="_",
                         dtype=int)
 
     df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.transform(
