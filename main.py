@@ -32,10 +32,10 @@ class Items(BaseModel):
     objects: List[Item]
 
 class Schema(BaseModel):
-    year: int
-    km_driven: int
+    year: float
+    km_driven: float
     mileage: float
-    engine: int
+    engine: float
     max_power: float
     fuel_Diesel: int = 0
     fuel_LPG: int = 0
