@@ -123,8 +123,9 @@ def predict_items(file: UploadFile = File(...)) -> FileResponse:
 
     df = df[lr_r.feature_names_in_]
     predictions = lr_r.predict(df)
+    pred_df = pd.DataFrame({"price_predicted": predictions})
 
-    df_with_predictions = pd.concat([df, predictions], axis=1)
+    df_with_predictions = pd.concat([df, pred_df], axis=1)
 
     csv = df_with_predictions.to_csv(index=False)
     file_csv = io.StringIO(csv)
