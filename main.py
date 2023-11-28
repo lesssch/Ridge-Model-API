@@ -7,6 +7,7 @@ import io
 import joblib
 from model import lr_r
 
+
 app = FastAPI()
 
 
