@@ -41,12 +41,12 @@ class Schema(BaseModel):
     fuel_LPG: int = 0
     fuel_Petrol: int = 0
     seller_type_Individual: int = 0
-    seller_type_Trustmark Dealer: int = 0
+    seller_type_Trustmark_Dealer: int = 0
     transmission_Manual: int = 0
-    owner_Fourth & Above Owner: int = 0
-    owner_Second Owner: int = 0
-    owner_Test Drive Car: int = 0
-    owner_Third Owner: int = 0
+    owner_Fourth_Above_Owner: int = 0
+    owner_Second_Owner: int = 0
+    owner_Test_Drive_Car: int = 0
+    owner_Third_Owner: int = 0
     seats_4: int = 0
     seats_5: int = 0
     seats_6: int = 0
@@ -77,6 +77,8 @@ def predict_item(item: Item) -> float:
 
     df["engine"] = df["engine"].astype(int)
     df["seats"] = df["seats"].astype(int)
+
+    df.replace(" ", "_", regex=True, inplace=True)
 
     df = df.drop(["selling_price", "name"], axis=1)
     df = pd.get_dummies(data=df, columns=["fuel", "seller_type", "transmission", "owner", "seats"], prefix_sep="_", dtype=int)

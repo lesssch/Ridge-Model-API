@@ -20,6 +20,8 @@ df_train[["mileage", "engine", "max_power", "seats"]] = df_train[["mileage", "en
 df_train["engine"] = df_train["engine"].astype(int)
 df_train["seats"] = df_train["seats"].astype(int)
 
+df_train[["fuel", "seller_type", "transmission", "owner", "seats"]] = df_train[["fuel", "seller_type", "transmission", "owner", "seats"]].replace(" ", "")
+
 y_train = df_train["selling_price"]
 
 X_train_cat = df_train.drop(["selling_price", "name"], axis=1)
