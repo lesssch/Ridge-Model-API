@@ -120,7 +120,7 @@ def predict_item(item: Item) -> float:
 
 
 @app.post("/predict_items")
-def predict_items(file: UploadFile = File(...)) -> dict:
+def predict_items(file: UploadFile = File(...)) -> FileResponse:
     df = pd.read_csv(file.file)
 
     df["mileage"] = df["mileage"].str.extract('(\d*\.?\d*)').astype(float)
@@ -147,19 +147,16 @@ def predict_items(file: UploadFile = File(...)) -> dict:
     df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.transform(
         df[["year", "km_driven", "mileage", "engine", "max_power"]])
 
-    data = df.to_dict()
-    return data
+    car = SchemaCSV(**df)
+    data = car.model_dump()
+    df = pd.DataFrame([data])
 
-    # car = Schema(**df)
-    # data = car.model_dump()
-    # df = pd.DataFrame([data])
-    #
-    # predictions = lr_r.predict(df)
-    #
-    # df_with_predictions = pd.concat([df, predictions], axis=1)
-    #
-    # csv = df_with_predictions.to_csv(index=False)
-    # file_csv = io.StringIO(csv)
-    #
-    # return FileResponse(file_csv, filename="predicitons.csv", media_type="text/csv")
+    predictions = lr_r.predict(df)
+
+    df_with_predictions = pd.concat([df, predictions], axis=1)
+
+    csv = df_with_predictions.to_csv(index=False)
+    file_csv = io.StringIO(csv)
+
+    return FileResponse(file_csv, filename="predicitons.csv", media_type="text/csv")
 
