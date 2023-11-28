@@ -59,7 +59,7 @@ class Schema(BaseModel):
 
 
 @app.post("/predict_item")
-def predict_item(item: Item) -> Tuple[float, tuple, tuple]:
+def predict_item(item: Item) -> Tuple[float, pd.DataFrame, tuple, tuple]:
     car = item.model_dump()
     car_instance = Item(**car)
     data = car_instance.model_dump()
@@ -91,7 +91,7 @@ def predict_item(item: Item) -> Tuple[float, tuple, tuple]:
 
     predict = lr_r.predict(df)
 
-    return predict, lr_r.coef_, lr_r.feature_names_in_
+    return predict, df, lr_r.coef_, lr_r.feature_names_in_
 
 
 @app.post("/predict_items")
