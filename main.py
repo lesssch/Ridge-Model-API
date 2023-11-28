@@ -55,32 +55,6 @@ class Schema(BaseModel):
     seats_10: int = 0
     seats_14: int = 0
 
-class SchemaCSV(BaseModel):
-    year: Series(float)
-    km_driven: Series(float)
-    mileage: Series(float)
-    engine: Series(float)
-    max_power: Series(float)
-    fuel_Diesel: Series(int)
-    fuel_LPG: Series(int)
-    fuel_Petrol: Series(int)
-    seller_type_Individual: Series(int)
-    seller_type_Trustmark_Dealer: Series(int)
-    transmission_Manual: Series(int)
-    owner_Fourth_Above_Owner: Series(int)
-    owner_Second_Owner: Series(int)
-    owner_Test_Drive_Car: Series(int)
-    owner_Third_Owner: Series(int)
-    seats_4: Series(int)
-    seats_5: Series(int)
-    seats_6: Series(int)
-    seats_7: Series(int)
-    seats_8: Series(int)
-    seats_9: Series(int)
-    seats_10: Series(int)
-    seats_14: Series(int)
-
-
 
 @app.post("/predict_item")
 def predict_item(item: Item) -> float:
