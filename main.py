@@ -83,6 +83,10 @@ def predict_item(item: Item) -> float:
     df = df.drop(["selling_price", "name"], axis=1)
     df = pd.get_dummies(data=df, columns=["fuel", "seller_type", "transmission", "owner", "seats"], prefix_sep="_", dtype=int)
 
+    sc = StandardScaler()
+    df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.fit_transform(
+        df[["year", "km_driven", "mileage", "engine", "max_power"]])
+
     df.to_dict()
     car = Schema(**df)
     data = car.model_dump()
