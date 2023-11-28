@@ -59,39 +59,39 @@ class Schema(BaseModel):
 
 
 @app.post("/predict_item")
-def predict_item(item: Item) -> Tuple[float, dict, tuple, tuple]:
+def predict_item(item: Item) -> dict:
     car = item.model_dump()
     car_instance = Item(**car)
     data = car_instance.model_dump()
     df = pd.DataFrame([data])
 
-    df["mileage"] = df["mileage"].str.extract('(\d*\.?\d*)').astype(float)
-    df["engine"] = df["engine"].str.extract('(\d+)').astype(float)
-    df["max_power"] = df["max_power"].str.extract('(\d+\.?\d*)').astype(float)
+    # df["mileage"] = df["mileage"].str.extract('(\d*\.?\d*)').astype(float)
+    # df["engine"] = df["engine"].str.extract('(\d+)').astype(float)
+    # df["max_power"] = df["max_power"].str.extract('(\d+\.?\d*)').astype(float)
+    #
+    # df = df.drop(["torque"], axis=1)
+    #
+    # df["engine"] = df["engine"].astype(int)
+    # df["seats"] = df["seats"].astype(int)
+    #
+    # df.replace(" ", "_", regex=True, inplace=True)
+    # df.replace("&_", "", regex=True, inplace=True)
+    #
+    # df = df.drop(["selling_price", "name"], axis=1)
+    # df = pd.get_dummies(data=df, columns=["fuel", "seller_type", "transmission", "owner", "seats"], prefix_sep="_", dtype=int)
+    #
+    # sc = StandardScaler()
+    # df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.fit_transform(
+    #     df[["year", "km_driven", "mileage", "engine", "max_power"]])
+    #
+    # df.to_dict()
+    # car = Schema(**df)
+    # data = car.model_dump()
+    # df = pd.DataFrame([data])
+    #
+    # predict = lr_r.predict(df)
 
-    df = df.drop(["torque"], axis=1)
-
-    df["engine"] = df["engine"].astype(int)
-    df["seats"] = df["seats"].astype(int)
-
-    df.replace(" ", "_", regex=True, inplace=True)
-    df.replace("&_", "", regex=True, inplace=True)
-
-    df = df.drop(["selling_price", "name"], axis=1)
-    df = pd.get_dummies(data=df, columns=["fuel", "seller_type", "transmission", "owner", "seats"], prefix_sep="_", dtype=int)
-
-    sc = StandardScaler()
-    df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.fit_transform(
-        df[["year", "km_driven", "mileage", "engine", "max_power"]])
-
-    df.to_dict()
-    car = Schema(**df)
-    data = car.model_dump()
-    df = pd.DataFrame([data])
-
-    predict = lr_r.predict(df)
-
-    return predict, data, lr_r.coef_, lr_r.feature_names_in_
+    return data
 
 
 @app.post("/predict_items")
