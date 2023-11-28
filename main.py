@@ -1,8 +1,7 @@
 import pandas as pd
 from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import FileResponse
-from pandas import Series
-from pydantic import BaseModel, Field
+from fastapi.responses import FileResponse, StreamingResponse
+from pydantic import BaseModel
 from typing import List
 import io
 from model import lr_r, sc
@@ -94,7 +93,7 @@ def predict_item(item: Item) -> float:
 
 
 @app.post("/predict_items")
-def predict_items(file: UploadFile = File(...)) -> FileResponse:
+def predict_items(file: UploadFile = File(...)) -> StreamingResponse:
     df = pd.read_csv(file.file)
 
     df["mileage"] = df["mileage"].str.extract('(\d*\.?\d*)').astype(float)
@@ -128,6 +127,9 @@ def predict_items(file: UploadFile = File(...)) -> FileResponse:
     df_with_predictions = pd.concat([df, pred_df], axis=1)
 
     csv = df_with_predictions.to_csv(index=False)
+    file_like = io.BytesIO(csv.encode())
 
-    return FileResponse(csv, filename="predicitons.csv", media_type="text/csv")
+    # Return the CSV file as a streaming response
+    return StreamingResponse(file_like, media_type="text/csv",
+                             headers={"Content-Disposition": "attachment; filename=predictions.csv"})
 
