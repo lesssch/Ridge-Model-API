@@ -81,7 +81,7 @@ def predict_item(item: Item) -> dict:
     df = df.drop(["selling_price", "name"], axis=1)
     df = pd.get_dummies(data=df, columns=["fuel", "seller_type", "transmission", "owner", "seats"], prefix_sep="_", dtype=int)
 
-    df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.transform(np.array(df[["year", "km_driven", "mileage", "engine", "max_power"]]).reshape(-1, 1))
+    df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.transform(df[["year", "km_driven", "mileage", "engine", "max_power"]])
 
     data = df.to_dict()
     # car = Schema(**df)
