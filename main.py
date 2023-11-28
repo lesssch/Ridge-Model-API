@@ -121,7 +121,11 @@ def predict_items(file: UploadFile = File(...)) -> FileResponse:
     df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.transform(
         df[["year", "km_driven", "mileage", "engine", "max_power"]])
 
-    df = df[lr_r.feature_names_in_]
+    columns = df.columns
+    features = lr_r.feature_names_in_
+    joined_features = [value for value in features if value in columns]
+
+    df = df[joined_features]
     predictions = lr_r.predict(df)
 
     df_with_predictions = pd.concat([df, predictions], axis=1)
