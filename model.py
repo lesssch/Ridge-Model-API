@@ -15,11 +15,11 @@ df_train["max_power"] = df_train["max_power"].str.extract('(\d+\.?\d*)').astype(
 
 df_train = df_train.drop(["torque"], axis=1)
 
-df_train.replace(" ", "_", regex=True, inplace=True)
-df_train.replace("&_", "", regex=True, inplace=True)
-
 df_train["engine"] = df_train["engine"].astype(int)
 df_train["seats"] = df_train["seats"].astype(int)
+
+df_train.replace(" ", "_", regex=True, inplace=True)
+df_train.replace("&_", "", regex=True, inplace=True)
 
 y_train = df_train["selling_price"]
 
