@@ -1,7 +1,8 @@
 import pandas as pd
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import FileResponse
-from pydantic import BaseModel
+from pandas import Series
+from pydantic import BaseModel, Field
 from typing import List
 import io
 from model import lr_r, sc
@@ -53,6 +54,31 @@ class Schema(BaseModel):
     seats_9: int = 0
     seats_10: int = 0
     seats_14: int = 0
+
+class SchemaCSV(BaseModel):
+    year: Series(float)
+    km_driven: Series(float)
+    mileage: Series(float)
+    engine: Series(float)
+    max_power: Series(float)
+    fuel_Diesel: Series = Field(Series([0]), dtype="int")
+    fuel_LPG: Series = Field(Series([0]), dtype="int")
+    fuel_Petrol: Series = Field(Series([0]), dtype="int")
+    seller_type_Individual: Series = Field(Series([0]), dtype="int")
+    seller_type_Trustmark_Dealer: Series = Field(Series([0]), dtype="int")
+    transmission_Manual: Series = Field(Series([0]), dtype="int")
+    owner_Fourth_Above_Owner: Series = Field(Series([0]), dtype="int")
+    owner_Second_Owner: Series = Field(Series([0]), dtype="int")
+    owner_Test_Drive_Car: Series = Field(Series([0]), dtype="int")
+    owner_Third_Owner: Series = Field(Series([0]), dtype="int")
+    seats_4: Series = Field(Series([0]), dtype="int")
+    seats_5: Series = Field(Series([0]), dtype="int")
+    seats_6: Series = Field(Series([0]), dtype="int")
+    seats_7: Series = Field(Series([0]), dtype="int")
+    seats_8: Series = Field(Series([0]), dtype="int")
+    seats_9: Series = Field(Series([0]), dtype="int")
+    seats_10: Series = Field(Series([0]), dtype="int")
+    seats_14: Series = Field(Series([0]), dtype="int")
 
 
 
