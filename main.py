@@ -35,7 +35,7 @@ class Schema(BaseModel):
     year: int
     km_driven: int
     mileage: float
-    engine: float
+    engine: int
     max_power: float
     fuel_Diesel: int = 0
     fuel_LPG: int = 0
@@ -82,10 +82,6 @@ def predict_item(item: Item) -> float:
 
     df = df.drop(["selling_price", "name"], axis=1)
     df = pd.get_dummies(data=df, columns=["fuel", "seller_type", "transmission", "owner", "seats"], prefix_sep="_", dtype=int)
-
-    sc = StandardScaler()
-    df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.fit_transform(
-        df[["year", "km_driven", "mileage", "engine", "max_power"]])
 
     df.to_dict()
     car = Schema(**df)
