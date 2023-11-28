@@ -128,7 +128,6 @@ def predict_items(file: UploadFile = File(...)) -> FileResponse:
     df_with_predictions = pd.concat([df, pred_df], axis=1)
 
     csv = df_with_predictions.to_csv(index=False)
-    file_csv = io.StringIO(csv)
 
-    return FileResponse(file_csv, filename="predicitons.csv", media_type="text/csv")
+    return FileResponse(csv, filename="predicitons.csv", media_type="text/csv")
 
