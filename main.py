@@ -96,7 +96,7 @@ def predict_item(item: Item) -> float:
 def predict_items(file: UploadFile = File(...)) -> StreamingResponse:
     df = pd.read_csv(file.file)
 
-    df_with_name = df.drop(["price_predicted"], axis=1)
+    df_with_name = df.drop(["selling_price"], axis=1)
 
     df["mileage"] = df["mileage"].str.extract('(\d*\.?\d*)').astype(float)
     df["engine"] = df["engine"].str.extract('(\d+)').astype(float)
