@@ -147,10 +147,7 @@ def predict_items(file: UploadFile = File(...)) -> FileResponse:
     df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.transform(
         df[["year", "km_driven", "mileage", "engine", "max_power"]])
 
-    car = SchemaCSV(**df)
-    data = car.model_dump()
-    df = pd.DataFrame([data])
-
+    df = df[lr_r.feature_names_in_]
     predictions = lr_r.predict(df)
 
     df_with_predictions = pd.concat([df, predictions], axis=1)
