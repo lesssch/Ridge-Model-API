@@ -15,6 +15,10 @@ df_train["max_power"] = df_train["max_power"].str.extract('(\d+\.?\d*)').astype(
 
 df_train = df_train.drop(["torque"], axis=1)
 
+df_train[["mileage", "engine", "max_power", "seats"]] = df_train[
+        ["mileage", "engine", "max_power", "seats"]].fillna(
+        df_train[["mileage", "engine", "max_power", "seats"]].median())
+
 df_train["engine"] = df_train["engine"].astype(int)
 df_train["seats"] = df_train["seats"].astype(int)
 

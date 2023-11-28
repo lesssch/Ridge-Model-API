@@ -71,10 +71,6 @@ def predict_item(item: Item) -> float:
 
     df = df.drop(["torque"], axis=1)
 
-    df[["mileage", "engine", "max_power", "seats"]] = df[
-        ["mileage", "engine", "max_power", "seats"]].fillna(
-        df[["mileage", "engine", "max_power", "seats"]].median())
-
     df["engine"] = df["engine"].astype(int)
     df["seats"] = df["seats"].astype(int)
 
