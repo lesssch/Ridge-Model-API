@@ -5,8 +5,7 @@ from pydantic import BaseModel
 from typing import List
 import io
 import joblib
-
-ridge_model = joblib.load("ridge_model.joblib")
+from model import lr_r
 
 app = FastAPI()
 
@@ -36,7 +35,7 @@ class Items(BaseModel):
 def predict_item(item: Item) -> float:
     data = pd.read_json(item).to_dict()
     df = pd.DataFrame([data])
-    predict = ridge_model.predict(df)
+    predict = lr_r.predict(df)
 
     return predict
 
