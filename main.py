@@ -96,6 +96,8 @@ def predict_item(item: Item) -> float:
 def predict_items(file: UploadFile = File(...)) -> StreamingResponse:
     df = pd.read_csv(file.file)
 
+    df_with_name = df.drop(["price_predicted"], axis=1)
+
     df["mileage"] = df["mileage"].str.extract('(\d*\.?\d*)').astype(float)
     df["engine"] = df["engine"].str.extract('(\d+)').astype(float)
     df["max_power"] = df["max_power"].str.extract('(\d+\.?\d*)').astype(float)
@@ -113,6 +115,7 @@ def predict_items(file: UploadFile = File(...)) -> StreamingResponse:
     df.replace("&_", "", regex=True, inplace=True)
 
     df = df.drop(["selling_price", "name"], axis=1)
+
     df = pd.get_dummies(data=df, columns=["fuel", "seller_type", "transmission", "owner", "seats"],
                         prefix_sep="_",
                         dtype=int)
@@ -124,7 +127,7 @@ def predict_items(file: UploadFile = File(...)) -> StreamingResponse:
     predictions = lr_r.predict(df)
     pred_df = pd.DataFrame({"price_predicted": predictions})
 
-    df_with_predictions = pd.concat([df, pred_df], axis=1)
+    df_with_predictions = pd.concat([df_with_name, pred_df], axis=1)
 
     csv = df_with_predictions.to_csv(index=False)
     file_like = io.BytesIO(csv.encode())
