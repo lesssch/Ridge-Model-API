@@ -3,7 +3,7 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from sklearn.preprocessing import StandardScaler
-from typing import List
+from typing import List, Tuple
 import io
 import joblib
 from model import lr_r
@@ -59,7 +59,7 @@ class Schema(BaseModel):
 
 
 @app.post("/predict_item")
-def predict_item(item: Item) -> float:
+def predict_item(item: Item) -> Tuple[float, tuple, tuple]:
     car = item.model_dump()
     car_instance = Item(**car)
     data = car_instance.model_dump()
@@ -91,7 +91,7 @@ def predict_item(item: Item) -> float:
 
     predict = lr_r.predict(df)
 
-    return predict
+    return predict, lr_r.coef_, lr_r.feature_names_in_
 
 
 @app.post("/predict_items")
