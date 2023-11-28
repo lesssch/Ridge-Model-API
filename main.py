@@ -65,12 +65,13 @@ def predict_item(item: Item) -> dict:
     data = car_instance.model_dump()
     df = pd.DataFrame([data])
 
-    # df["mileage"] = df["mileage"].str.extract('(\d*\.?\d*)').astype(float)
-    # df["engine"] = df["engine"].str.extract('(\d+)').astype(float)
-    # df["max_power"] = df["max_power"].str.extract('(\d+\.?\d*)').astype(float)
-    #
-    # df = df.drop(["torque"], axis=1)
-    #
+    df["mileage"] = df["mileage"].str.extract('(\d*\.?\d*)').astype(float)
+    df["engine"] = df["engine"].str.extract('(\d+)').astype(float)
+    df["max_power"] = df["max_power"].str.extract('(\d+\.?\d*)').astype(float)
+
+    df = df.drop(["torque"], axis=1)
+    data = df.to_dict()
+
     # df["engine"] = df["engine"].astype(int)
     # df["seats"] = df["seats"].astype(int)
     #
