@@ -79,6 +79,7 @@ def predict_item(item: Item) -> float:
     df["seats"] = df["seats"].astype(int)
 
     df.replace(" ", "_", regex=True, inplace=True)
+    df.replace("&_", "", regex=True, inplace=True)
 
     df = df.drop(["selling_price", "name"], axis=1)
     df = pd.get_dummies(data=df, columns=["fuel", "seller_type", "transmission", "owner", "seats"], prefix_sep="_", dtype=int)
