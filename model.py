@@ -26,7 +26,7 @@ X_train_cat = df_train.drop(["selling_price", "name"], axis=1)
 X_train_cat = pd.get_dummies(data=X_train_cat, columns=["fuel", "seller_type", "transmission", "owner", "seats"], drop_first=True, prefix_sep="_", dtype=int)
 
 sc = StandardScaler()
-X_train_cat = sc.fit_transform(X_train_cat)
+X_train_cat[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.fit_transform(X_train_cat[["year", "km_driven", "mileage", "engine", "max_power"]])
 
 lr_r = Ridge(alpha=5)
 lr_r.fit(X_train_cat, y_train)
