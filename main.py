@@ -1,13 +1,10 @@
 import pandas as pd
-from fastapi import FastAPI, File, UploadFile, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
-from sklearn.preprocessing import StandardScaler
-from typing import List, Tuple
+from typing import List
 import io
-import joblib
 from model import lr_r, sc
-import numpy as np
 
 
 app = FastAPI()
@@ -93,5 +90,34 @@ def predict_item(item: Item) -> float:
 
 
 @app.post("/predict_items")
-def predict_items(file: UploadFile = File(...)) -> None:
-    return ...
+def predict_items(file: UploadFile = File(...)) -> FileResponse:
+    df = pd.read_csv(file.file)
+
+    df["mileage"] = df["mileage"].str.extract('(\d*\.?\d*)').astype(float)
+    df["engine"] = df["engine"].str.extract('(\d+)').astype(float)
+    df["max_power"] = df["max_power"].str.extract('(\d+\.?\d*)').astype(float)
+
+    df = df.drop(["torque"], axis=1)
+
+    df["engine"] = df["engine"].astype(int)
+    df["seats"] = df["seats"].astype(int)
+
+    df.replace(" ", "_", regex=True, inplace=True)
+    df.replace("&_", "", regex=True, inplace=True)
+
+    df = df.drop(["selling_price", "name"], axis=1)
+    df = pd.get_dummies(data=df, columns=["fuel", "seller_type", "transmission", "owner", "seats"], prefix_sep="_",
+                        dtype=int)
+
+    df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.transform(
+        df[["year", "km_driven", "mileage", "engine", "max_power"]])
+
+    predictions = lr_r.predict(df)
+
+    df_with_predictions = pd.concat([df, predictions], axis=1)
+
+    csv = df_with_predictions.to_csv(index=False)
+    file_csv = io.StringIO(csv)
+
+    return FileResponse(file_csv, filename="predicitons.csv", media_type="text/csv")
+

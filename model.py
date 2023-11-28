@@ -1,8 +1,6 @@
 import pandas as pd
 from sklearn.linear_model import Ridge
 from sklearn.preprocessing import StandardScaler
-import joblib
-
 
 df_train = pd.read_csv('https://raw.githubusercontent.com/hse-mlds/ml/main/hometasks/HT1/cars_train.csv')
 
@@ -35,5 +33,3 @@ X_train_cat[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.fit_tr
 
 lr_r = Ridge(alpha=5)
 lr_r.fit(X_train_cat, y_train)
-
-joblib.dump(lr_r, "ridge_model.joblib")
