@@ -60,7 +60,7 @@ class Schema(BaseModel):
 
 
 @app.post("/predict_item")
-def predict_item(item: Item) -> dict:
+def predict_item(item: Item) -> float:
     car = item.model_dump()
     car_instance = Item(**car)
     data = car_instance.model_dump()
@@ -83,14 +83,13 @@ def predict_item(item: Item) -> dict:
 
     df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.transform(df[["year", "km_driven", "mileage", "engine", "max_power"]])
 
-    data = df.to_dict()
-    # car = Schema(**df)
-    # data = car.model_dump()
-    # df = pd.DataFrame([data])
-    #
-    # predict = lr_r.predict(df)
+    car = Schema(**df)
+    data = car.model_dump()
+    df = pd.DataFrame([data])
 
-    return data
+    predict = lr_r.predict(df)
+
+    return predict
 
 
 @app.post("/predict_items")
