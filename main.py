@@ -123,6 +123,7 @@ def predict_items(file: UploadFile = File(...)) -> StreamingResponse:
     df[["year", "km_driven", "mileage", "engine", "max_power"]] = sc.transform(
         df[["year", "km_driven", "mileage", "engine", "max_power"]])
 
+    df[['seats_10', 'seats_14']] = 0
     df = df[lr_r.feature_names_in_]
     predictions = lr_r.predict(df)
     pred_df = pd.DataFrame({"price_predicted": predictions})
